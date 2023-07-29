@@ -1,0 +1,33 @@
+{% extends 'shop/basic.html' %}
+{% block title %}View Blog {{blog.0.blog_id}}- My Awesome Cart{% endblock %}
+{% block body %}
+<main class="container mt-4">
+
+    <div class="row mb-2" style="width: 70%;
+    margin: 0px auto;">
+        <div class="col-md-12">
+
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <strong class="d-inline-block mb-2 text-primary">{{i.h1}}</strong>
+                    <h3 class="mb-0">{{blog.0.h2}}</h3>
+                    <div class="mb-1 text-muted">{{blog.0.publish_date}}</div>
+                    <p class="card-text mb-auto">{{blog.0.p2}}</p>
+                </div>
+                <div class="col-auto d-none d-lg-block">
+                    <img src="/media/{{blog.0.thumbnail}}" class="bd-placeholder-img" width="200" height="250">
+
+                </div>
+                <div class="fb-like" data-href="http://127.0.0.1:8000/blog/{{blog.0.blog_id}}" data-width="" data-layout="" data-action="" data-size="" data-share="true"></div>
+
+                <div class="fb-comments" data-href="http://127.0.0.1:8000/blog/viewBlog/{{blog.0.blog_id}}" data-width="" data-numposts="5"></div>
+            </div>
+        </div>
+    </div>
+
+</main>
+{% endblock %}
+{% block js %}]
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v17.0" nonce="Ms9o3taL"></script>
+{% endblock %}

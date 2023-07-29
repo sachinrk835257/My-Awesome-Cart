@@ -1,0 +1,153 @@
+{% extends 'shop/basic.html' %}
+{% block title %} items in your cart -My Awesome Cart {% endblock %}
+{% block css %}
+<style>
+    .carousel-item .card {
+        margin-right: 5px;
+        border: 2px solid black;
+        padding: 8px;
+    }
+
+    .carousel-item .card img {
+        height: 242px;
+    }
+
+    footer {
+        background-color: #504848;
+        color: white;
+        padding-top: 5px;
+    }
+
+    .slides {
+        background-color: black;
+    }
+
+    body {
+        background-color: antiquewhite;
+    }
+
+    .popover {
+
+        max-width: 184px;
+        line-height: 1.3rem;
+        text-align: center;
+        height: 59px;
+    }
+
+    .popover-body {
+        padding: 0.5rem;
+    }
+
+    .row1 {
+        display: flex;
+        justify-content: center;
+    }
+
+    .row1 img {
+        width: 441px;
+        /* padding: 10px 10px 10px 0px; */
+        height: 500px;
+        border: 2px solid black;
+    }
+
+    .text-col {
+        width: 40%;
+        padding: 10px 0px 0px 10px;
+    }
+
+    #checkout,
+    #clearAll {
+        width: 20%;
+        height: 48px;
+        font-size: 1.3rem;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+
+
+<div class="container">
+    {% for i in cartProds reversed %}
+    {% for j in i %}
+
+    <div class="container">
+        <h2 style="margin-left: 171px;
+        text-transform: capitalize;
+        margin-top: 11px;">{{j.product_name}}</h2>
+        <div class="row1">
+            <div class="img-col">
+                <img src="/media/{{j.product_image}}" alt="not found">
+                <div class="btn-row">
+                    <button id="buy{{j.id}}" type="button" class="btn btn-primary">Buy Now</button>
+                    <span id="rplc{{j.id}}" class="mx-2 divbtns">
+                        <button id="prod{{j.id}}" type="button" class="btn btn-warning cart">Add To
+                            Cart</button>
+                    </span>
+                    <button id="del{{j.id}}" type="button" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+            <div class="text-col">
+                <h5 class="card-title">{{j.product_name}}</h5>
+                <p class="card-text" style="color:red;"><strong>RS. </strong>{{j.price}}</p>
+                <p class="card-text" style="text-align: justify;">{{j.desc}}</p>
+                <p class="card-text"><strong> Published date {{j.pub_date}}</strong></p>
+            </div>
+        </div>
+        <hr style="color: cornflowerblue;opacity: 1;">
+    </div>
+    {% endfor %}
+
+    <!-- <div class="container my-5">
+    <a href="/shop/checkOut"><button id="checkout" type="button" class="btn btn-primary">CheckOut All</button></a>
+    <button id="clearAll" type="button" class="btn btn-danger">Clear All</button>
+</div> -->
+
+    {% if forloop.last %}
+    <div class="container my-5">
+        <a href="/shop/checkOut"><button id="checkout" type="button" class="btn btn-primary">CheckOut All</button></a>
+        <button id="clearAll" type="button" class="btn btn-danger">Clear All</button>
+    </div>
+    {% endif %}
+
+
+    {% empty %}
+    <div class="container">
+
+        <h2 style="text-align: center;margin-top: 20px;">add product right now</h2>
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script>
+
+    window.addEventListener('load', function () {
+
+        if (document.baseURI.indexOf('shop/yourCart') != -1) {
+            var cart = JSON.parse(localStorage.getItem('cart'));
+            console.log(cart)
+            for (const key in cart) {
+                if (cart[key] != 0) {
+                    updateCartBtn(cart, key);
+                }
+            }
+        }
+
+
+    })
+    $('#clearAll').click(function () {
+        let conf = confirm("are you sure to clear all the products from your cart?")
+        if (conf) {
+
+            localStorage.clear()
+            document.location = '/shop'
+        }
+
+    })
+</script>
+
+{% endblock %}

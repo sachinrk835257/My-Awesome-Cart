@@ -1,0 +1,158 @@
+{% extends 'shop/basic.html' %}
+{% block title %}track your order -My Awesome Cart{% endblock %}
+{% block css %}
+<style>
+    .carousel-item .card {
+        margin-right: 5px;
+        border: 2px solid black;
+        padding: 8px;
+    }
+
+    .carousel-item .card img {
+        height: 242px;
+    }
+
+    footer {
+        background-color: #504848;
+        color: white;
+        padding-top: 5px;
+    }
+
+    .slides {
+        background-color: black;
+    }
+
+    .popover {
+
+        max-width: 184px;
+        line-height: 1.3rem;
+        text-align: center;
+        height: 59px;
+    }
+
+    .popover-body {
+        padding: 0.5rem;
+    }
+</style>
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="container p-5">
+        <h2>STEP1 : Enter your order id and Email</h2>
+        <form id="formTrack" action="#" class="row g-3" method="post">{% csrf_token %}
+            <div class="col-md-6">
+                <label for="inputname">Order Id</label>
+                <input type="text" class="form-control" id="orderId" name="order_Id" placeholder="Order Id">
+            </div>
+            <div class="col-md-6">
+                <label for="inputEmail4" class="form-label">Email</label>
+                <input type="email" class="form-control" name="email" id="inputEmail4">
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Track Order</button>
+            </div>
+        </form>
+
+        <h2>STEP2 : order details are shown here</h2>
+        <p id="updateDetails">enter your order id and email details for further process</p>
+        <ul class="list-group" id="updatesInfo">
+            <!-- <li class="list-group-item d-flex justify-content-between align-items-center my-2">
+                description text
+                <span id="updt1" class="badge bg-primary rounded-pill">timestamp</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center my-2">
+                description text
+                <span id="updt2" class="badge bg-primary rounded-pill">timestamp</span>
+            </li> -->
+        </ul>
+        <div id="prodInfo">
+
+        </div>
+        <!-- <ul id="productList">
+                        <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Sr No.</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                  </tr>
+                </tbody>
+              </table>
+        </ul> -->
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script>
+
+    var date = new Date('2023-07-03');
+    console.log(date)
+    console.log(date.getFullYear())
+    console.log(date.getMonth())
+    console.log(date.getDay())
+    $('#formTrack').submit(function (event) {
+        $('#updatesInfo').empty();
+        $('#prodInfo').empty();
+        $.ajax(
+            {
+                type: 'POST',
+                url: '/shop/tracker/',
+                data: {
+                    //keys should be the same name as value of name attribute provided in input element
+                    "order_Id": $('input[name=order_Id]').val(),
+                    "email": $('input[name=email]').val(),
+                    "csrfmiddlewaretoken": $('input[name=csrfmiddlewaretoken]').val()
+                },
+                encode: true
+            }
+
+        )
+            .done(function (data) {
+                responses = JSON.parse(data)
+                // console.log("tracker json parse -- updates-",updates)           //result as a form of an arrays --> 0:"products info", 1:"order status"
+                if (responses.length > 0 & responses != {}) {
+                    // console.log(responses[0], responses[1])
+                    tbl = '<table class="table caption-top"><caption><h3>Order Details</h3></caption><thead><tr><th scope="col">Sr No.</th><th scope="col">Product Name</th><th scope="col">Price</th><th scope="col">Quantity</th></tr></thead><tbody></tbody></table>'
+                    $('#prodInfo').append(tbl);
+                    for (let inProdInfo = 0; inProdInfo < responses[0].length; inProdInfo++) {
+                        const element = responses[0][inProdInfo];
+                        let product_name = responses[0][inProdInfo]['product_name'];
+                        let product_price = responses[0][inProdInfo]['price'];
+                        let quantity = responses[0][inProdInfo]["quantity"]
+                        
+                        rows = '<tr><th scope="row">' + (inProdInfo+1) + '</th><td>' + product_name + '</td><td>' + product_price + '</td><td>'+ quantity + '</td></tr>'
+                        $('#prodInfo table tbody').append(rows);
+
+                    }
+                    for (let inUpdates = 0; inUpdates < responses[1].length; inUpdates++) {
+                        const element = responses[1][inUpdates];
+                        let text = responses[1][inUpdates]['text'];
+                        let time = responses[1][inUpdates]['time'];
+                        mystr = `<li class="list-group-item d-flex justify-content-between align-items-center my-2">
+                        ${text}
+                        <span class="badge bg-primary rounded-pill">${time}</span>
+                    </li>`
+                        $('#updatesInfo').append(mystr);
+                    }
+
+                } else {
+                    mystr = `<li class="list-group-item d-flex justify-content-between align-items-center my-2">
+                    Sorry, We are not able to fetch this order id and email. Make sure to type correct order Id and email</li>`
+                    $('#updatesInfo').append(mystr);
+                }
+            })
+        event.preventDefault()
+    })
+</script>
+{% endblock %}

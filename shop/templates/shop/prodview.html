@@ -1,0 +1,83 @@
+{% extends 'shop/basic.html' %}
+{% block title %}product view {{product.0.id}} -My Awesome Cart{% endblock %}
+{% block css %}
+<style>
+    .carousel-item .card {
+        margin-right: 5px;
+        border: 2px solid black;
+        padding: 8px;
+    }
+
+    .carousel-item .card img {
+        height: 242px;
+    }
+
+    footer {
+        background-color: #504848;
+        color: white;
+        padding-top: 5px;
+    }
+
+    .slides {
+        background-color: black;
+    }
+
+    .popover {
+
+        max-width: 184px;
+        line-height: 1.3rem;
+        text-align: center;
+        height: 59px;
+    }
+
+    .popover-body {
+        padding: 0.5rem;
+    }
+
+    .row1 {
+        display: flex;
+        justify-content: center;
+    }
+
+    .row1 img {
+        width: 441px;
+        padding: 10px 10px 10px 0px;
+        height: 500px;
+    }
+
+    .text-col {
+        width: 40%;
+        padding: 10px 0px 0px 10px;
+    }
+</style>
+{% endblock %}
+{% block body %}
+<div class="container">
+    <h2 style="margin-left: 171px;
+    text-transform: capitalize;
+    margin-top: 11px;">{{product.0.product_name}}</h2>
+    <div class="row1">
+        <div class="img-col">
+            <img src="/media/{{product.0.product_image}}" alt="not found">
+            <div class="btn-row">
+                <button id="buy{{product.0.id}}" type="button" class="btn btn-warning">Buy Now</button>
+                <span id="rplc{{product.0.id}}" class="divbtns">
+                <button id="prod{{product.0.id}}" type="button" class="btn btn-warning cart">Add To Cart</button>
+                </span>
+            </div>
+        </div>
+        <div class="text-col">
+            <h5 class="card-title">{{product.0.product_name}}</h5>
+            <p class="card-text" style="color:red;"><strong>RS. </strong>{{product.0.price}}</p>
+            <p class="card-text" style="text-align: justify;">{{product.0.desc}}</p>
+            <p class="card-text"><strong> Published date {{product.0.pub_date}}</strong></p>
+        </div>
+    </div>
+
+    
+</div>
+
+
+
+{% endblock %}
+

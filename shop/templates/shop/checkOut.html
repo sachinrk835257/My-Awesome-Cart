@@ -1,0 +1,97 @@
+{% extends 'shop/basic.html' %}
+{% block title %}checkintOUt products - My Awewome Cart {% endblock %}
+{% block body %}
+<div class="container">
+    <div class="container p-5">
+        <h2>STEP1 : check the products you want to check out</h2>
+        <ul class="list-group" id="nameAndCount">
+            {% for j in cartProds reversed %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{j.0.product_name}}
+                <span id="{{j.0.id}}" class="badge bg-primary rounded-pill">0</span>
+            </li>
+            {% if forloop.last %}
+            <hr>
+            <li class="list-group-item d-flex justify-content-between align-items-center" style="background-color: #ee9595;
+            border-radius: 10px;">
+                <h3>Price for All</h3>
+                <span id="{{j.id}}" class="badge bg-primary rounded-pill">{{totalCost}}</span>
+            </li>
+            {% endif %}
+            {% empty %}
+            <div class="container">
+                <h2 style="text-align: center;margin-top: 20px;">add products right now</h2>
+            </div>
+            {% endfor %}
+
+        </ul>
+        <h2>STEP2 : enter details and place your order</h2>
+        <form id="submitOrder" action="/shop/checkOut/" class="row g-3" method="post">{% csrf_token %}
+            <div class="col-12">
+                <label for="name" class="form-label">Enter Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
+                <input type="hidden" name="nameJson" id="nameJson">
+            </div>
+            <div class="col-md-6">
+                <label for="inputEmail4" class="form-label">Email</label>
+                <input type="email" class="form-control" name="email" id="inputEmail4">
+            </div>
+            <div class="col-md-6">
+                <label for="inputPassword4" class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" name="phone" id="phon" required>
+            </div>
+            <div class="col-12">
+                <label for="inputAddress" class="form-label">Address lane1</label>
+                <input type="text" class="form-control" id="inputAddress" name="adr1" placeholder="1234 Main St"
+                    required>
+            </div>
+            <div class="col-12">
+                <label for="inputAddress2" class="form-label">Address lane2</label>
+                <input type="text" class="form-control" id="inputAddress2" name="adr2"
+                    placeholder="Apartment, studio, or floor">
+            </div>
+            <div class="col-md-6">
+                <label for="inputCity" class="form-label">City</label>
+                <input type="text" class="form-control" name="city" id="inputCity">
+            </div>
+            <div class="col-md-4">
+                <label for="inputState" class="form-label">State</label>
+                <select id="inputState" name="selectState" class="form-select">
+                    <option value="up" selected>Choose...</option>
+                    <option value="up">up</option>
+                    <option value="haryana">haryana</option>
+                    <option value="rajasthan">rajasthan</option>
+                    <option value="delhi">delhi</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label for="inputZip" class="form-label">Zip</label>
+                <input type="text" class="form-control" id="inputZip" name="zip" required>
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Place Order</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+
+    var cart = JSON.parse(localStorage.getItem('cart'))
+    let demo = document.querySelectorAll('#nameAndCount li span')
+    $('#nameJson').val(JSON.stringify(cart))
+    console.log("json value is set")
+    demo.forEach(i => {
+        // console.log(i.id,cart["prod" + i.id])
+        document.getElementById(i.id).innerText = cart["prod" + i.id]
+    });
+
+    {% if thank %}
+    document.location = '/shop'
+    alert("{{id}} note your order id you can track}")
+    localStorage.clear()
+    {% endif %}
+</script>
+{% endblock %}

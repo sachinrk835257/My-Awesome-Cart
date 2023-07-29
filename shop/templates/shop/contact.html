@@ -1,0 +1,40 @@
+{% extends 'shop/basic.html' %}
+{% block title %}contact Us -My Awesome Cart{% endblock %}
+{% block css %}
+<style>
+    footer {
+        background-color: #504848;
+        color: white;
+        padding-top: 5px;
+    }
+</style>
+{% endblock %}
+{% block body %}
+
+<div class="container">
+    <h2>Contact Us</h2>
+    <form action="/shop/contact/" method="post">{% csrf_token %} {# sould write write the trailing space both endes of any end point #}
+        <div>
+            <label for="enterName">enter Name</label>
+            <input type="text" id="enterName" placeholder="enter your name" name="name">
+        </div>
+
+        <div>
+            <label for="enterMail">enter Email</label>
+            <input type="email" id="enterMail" placeholder="example@gmail.com" name="email">
+        </div>
+        <div>
+            <label for="enterPhone">enter Name</label>
+            <input type="tel" id="enterPhone" placeholder="10 DIGIT PHONE NUMBER" name="phone">
+        </div>
+        <div>
+            <label for="desc">How may I help you?</label>
+            <br>
+            <textarea name="query" id="desc"></textarea>
+        </div>
+
+        <button type="submit">submit</button>
+    </form>
+</div>
+
+{% endblock %}
